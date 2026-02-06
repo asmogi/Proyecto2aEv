@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once 'models/iInteractuable.php';
 require_once 'models/iGestor.php';
 require_once 'models/entidadestelar.php';
@@ -13,6 +11,8 @@ require_once 'helpers/paginador.php';
 
 require_once 'controllers/ControladorEntidades.php';
 
+session_start();
+
 $gestor = new GestorSesion();
 $controlador = new ControladorEntidades($gestor);
 
@@ -24,6 +24,35 @@ if ($accion === 'guardar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+if ($accion === 'actualizar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $controlador->actualizarDesdePost($_POST);
+    header('Location: index.php');
+    exit;
+}
+
+if ($accion === 'crear') {
+    $modo = 'crear';
+    $entidad = null;
+    require 'views/crear.php';
+    exit;
+}
+
+if ($accion === 'editar') {
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        header('Location: index.php');
+        exit;
+    }
+    $entidad = $gestor->obtenerPorId($id);
+    if (!$entidad) {
+        header('Location: index.php');
+        exit;
+    }
+    $modo = 'editar';
+    require 'views/crear.php';
+    exit;
+}
+
 $pagina = (int)($_GET['pagina'] ?? 1);
 $paginacion = $controlador->listar($pagina);
 
@@ -31,4 +60,4 @@ $entidades = $paginacion['datos'];
 $paginaActual = $paginacion['paginaActual'];
 $totalPaginas = $paginacion['totalPaginas'];
 
-require 'views/lista.php';
+require 'views/listado.php';

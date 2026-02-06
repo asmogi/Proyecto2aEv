@@ -42,6 +42,14 @@ abstract class EntidadEstelar implements iInteractuable {
         return $this->nivelEstabilidad;
     }
 
+    public function getNombre(): string {
+        return $this->nombre;
+    }
+
+    public function getPlanetaOrigen(): string {
+        return $this->planetaOrigen;
+    }
+
     public function esInestable(): bool {
         return $this->nivelEstabilidad < 3;
     }

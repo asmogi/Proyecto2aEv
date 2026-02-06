@@ -7,7 +7,7 @@
 
 <?php foreach ($entidades as $e): ?>
 <tr style="<?= $e->getNivelEstabilidad() < 3 ? 'background:red;' : '' ?>">
-    <td><?= $e->reaccionar() ?></td>
+    <td><?= $e->getNombre() ?></td>
     <td><?= $e->getTipo() ?></td>
     <td><?= $e->reaccionar() ?></td>
 </tr>

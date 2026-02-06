@@ -26,4 +26,8 @@ class FormaDeVida extends EntidadEstelar {
     public function getTipo(): string {
         return "Forma de Vida";
     }
+
+    public function getDieta(): string {
+        return $this->dieta;
+    }
 }

@@ -26,4 +26,8 @@ class ArtefactoAntiguo extends EntidadEstelar {
     public function getTipo(): string {
         return "Artefacto Antiguo";
     }
+
+    public function getAntiguedad(): int {
+        return $this->antiguedad;
+    }
 }

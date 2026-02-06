@@ -26,5 +26,9 @@ class MineralRaro extends EntidadEstelar {
     public function getTipo(): string {
         return "Mineral Raro";
     }
+
+    public function getDureza(): int {
+        return $this->dureza;
+    }
 }
 

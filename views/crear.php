@@ -3,7 +3,23 @@
 $modo ??= 'crear';
 $entidad ??= null;
 
-$tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
+$accionFormulario = $modo === 'crear' ? 'index.php?accion=guardar' : 'index.php?accion=actualizar';
+$tipoSeleccionado = $entidad ? str_replace(' ', '', $entidad->getTipo()) : '';
+
+$dietaValor = '';
+$durezaValor = '';
+$antiguedadValor = '';
+if ($entidad) {
+    if ($tipoSeleccionado === 'FormaDeVida' && method_exists($entidad, 'getDieta')) {
+        $dietaValor = $entidad->getDieta();
+    }
+    if ($tipoSeleccionado === 'MineralRaro' && method_exists($entidad, 'getDureza')) {
+        $durezaValor = $entidad->getDureza();
+    }
+    if ($tipoSeleccionado === 'ArtefactoAntiguo' && method_exists($entidad, 'getAntiguedad')) {
+        $antiguedadValor = $entidad->getAntiguedad();
+    }
+}
 ?>
 
 <h2>
@@ -30,7 +46,7 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
                 name="nombre"
                 required
                 minlength="3"
-                value="<?= $entidad->nombre ?? '' ?>"
+                value="<?= $entidad ? $entidad->getNombre() : '' ?>"
             >
         </label>
 
@@ -42,7 +58,7 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
                 type="text"
                 name="planetaOrigen"
                 required
-                value="<?= $entidad->planetaOrigen ?? '' ?>"
+                value="<?= $entidad ? $entidad->getPlanetaOrigen() : '' ?>"
             >
         </label>
 
@@ -56,7 +72,7 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
                 min="1"
                 max="10"
                 required
-                value="<?= $entidad->getNivelEstabilidad() ?? 5 ?>"
+                value="<?= $entidad ? $entidad->getNivelEstabilidad() : 5 ?>"
             >
         </label>
     </fieldset>
@@ -69,13 +85,13 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
 
         <select name="tipoEntidad" id="tipoEntidad" required>
             <option value="">-- Selecciona --</option>
-            <option value="FormaDeVida" <?= $tipoSeleccionado === 'Forma de Vida' ? 'selected' : '' ?>>
+            <option value="FormaDeVida" <?= $tipoSeleccionado === 'FormaDeVida' ? 'selected' : '' ?>>
                 Forma de Vida
             </option>
-            <option value="MineralRaro" <?= $tipoSeleccionado === 'Mineral Raro' ? 'selected' : '' ?>>
+            <option value="MineralRaro" <?= $tipoSeleccionado === 'MineralRaro' ? 'selected' : '' ?>>
                 Mineral Raro
             </option>
-            <option value="ArtefactoAntiguo" <?= $tipoSeleccionado === 'Artefacto Antiguo' ? 'selected' : '' ?>>
+            <option value="ArtefactoAntiguo" <?= $tipoSeleccionado === 'ArtefactoAntiguo' ? 'selected' : '' ?>>
                 Artefacto Antiguo
             </option>
         </select>
@@ -91,9 +107,9 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
             Dieta:
             <select name="dieta">
                 <option value="">-- Selecciona --</option>
-                <option value="Carbono">Carbono</option>
-                <option value="Silicio">Silicio</option>
-                <option value="Energía">Energía</option>
+                <option value="Carbono" <?= $dietaValor === 'Carbono' ? 'selected' : '' ?>>Carbono</option>
+                <option value="Silicio" <?= $dietaValor === 'Silicio' ? 'selected' : '' ?>>Silicio</option>
+                <option value="Energía" <?= $dietaValor === 'Energía' ? 'selected' : '' ?>>Energía</option>
             </select>
         </label>
     </fieldset>
@@ -103,7 +119,7 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
 
         <label>
             Dureza (Escala Mohs Galáctica):
-            <input type="number" name="dureza" min="1" max="20">
+            <input type="number" name="dureza" min="1" max="20" value="<?= htmlspecialchars($durezaValor) ?>">
         </label>
     </fieldset>
 
@@ -112,7 +128,7 @@ $tipoSeleccionado = $entidad ? $entidad->getTipo() : '';
 
         <label>
             Antigüedad (en años luz):
-            <input type="number" name="antiguedad" min="1">
+            <input type="number" name="antiguedad" min="1" value="<?= htmlspecialchars($antiguedadValor) ?>">
         </label>
     </fieldset>
 
